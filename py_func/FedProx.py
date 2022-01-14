@@ -5,10 +5,12 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
+from sklearn.cluster import KMeans
 import numpy as np
 from copy import deepcopy
 
 import random
+from time import *
 
 
 def set_to_zero_model_weights(model):
@@ -21,7 +23,8 @@ def set_to_zero_model_weights(model):
 def FedAvg_agregation_process(model, clients_models_hist: list, weights: list):
     """Creates the new model of a given iteration with the models of the other
     clients"""
-
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")#
+    model.to(device)#s
     new_model = deepcopy(model)
     set_to_zero_model_weights(new_model)
 
@@ -30,6 +33,7 @@ def FedAvg_agregation_process(model, clients_models_hist: list, weights: list):
         for idx, layer_weights in enumerate(new_model.parameters()):
 
             contribution = client_hist[idx].data * weights[k]
+
             layer_weights.data.add_(contribution)
 
     return new_model
@@ -58,11 +62,12 @@ def FedAvg_agregation_process_for_FA_sampling(
 
 def accuracy_dataset(model, dataset):
     """Compute the accuracy of `model` on `test_data`"""
-
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")#
     correct = 0
-
+    model = model.to(device)
     for features, labels in dataset:
-
+        features = features.to(device)
+        labels = labels.to(device)
         predictions = model(features)
         _, predicted = predictions.max(1, keepdim=True)
 
@@ -75,9 +80,12 @@ def accuracy_dataset(model, dataset):
 
 def loss_dataset(model, train_data, loss_f):
     """Compute the loss of `model` on `test_data`"""
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")#
     loss = 0
+    model = model.to(device)
     for idx, (features, labels) in enumerate(train_data):
-
+        features = features.to(device)
+        labels = labels.to(device)
         predictions = model(features)
         loss += loss_f(predictions, labels)
 
@@ -86,7 +94,6 @@ def loss_dataset(model, train_data, loss_f):
 
 
 def loss_classifier(predictions, labels):
-
     criterion = nn.CrossEntropyLoss()
     return criterion(predictions, labels)
 
@@ -104,9 +111,11 @@ def n_params(model):
     return n_params
 
 
-def difference_models_norm_2(model_1, model_2):
+def difference_models_norm_2(device, model_1, model_2):
     """Return the norm 2 difference between the two model parameters"""
-
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")#
+    model_1.to(device)#
+    model_2.to(device)#
     tensor_1 = list(model_1.parameters())
     tensor_2 = list(model_2.parameters())
 
@@ -122,18 +131,22 @@ def difference_models_norm_2(model_1, model_2):
 
 def local_learning(model, mu: float, optimizer, train_data, n_SGD: int, loss_f):
 
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")#
     model_0 = deepcopy(model)
+    model.to(device)#
 
     for _ in range(n_SGD):
 
         features, labels = next(iter(train_data))
+        features = features.to(device)#
+        labels = labels.to(device)#
 
         optimizer.zero_grad()
 
         predictions = model(features)
 
         batch_loss = loss_f(predictions, labels)
-        batch_loss += mu / 2 * difference_models_norm_2(model, model_0)
+        batch_loss += mu / 2 * difference_models_norm_2(device, model, model_0)
 
         batch_loss.backward()
         optimizer.step()
@@ -199,7 +212,7 @@ def FedProx_sampling_random(
     print(f"====> i: 0 Loss: {server_loss} Test Accuracy: {server_acc}")
 
     sampled_clients_hist = np.zeros((n_iter, K)).astype(int)
-
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")#
     for i in range(n_iter):
 
         clients_params = []
@@ -211,7 +224,7 @@ def FedProx_sampling_random(
 
         for k in sampled_clients:
 
-            local_model = deepcopy(model)
+            local_model = deepcopy(model).to(device)
             local_optimizer = optim.SGD(local_model.parameters(), lr=lr)
 
             local_learning(
@@ -268,6 +281,45 @@ def FedProx_sampling_random(
 
     return model, loss_hist, acc_hist
 
+#计算每个clinet的平均类分数
+def cal_per_avg_class_score(model, dataset):
+    """Compute the accuracy of `model` on `test_data`"""
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")#
+    model = model.to(device)#
+    loss, total, correct = 0.0, 0.0, 0.0
+    outputs_sum_per_label = np.array([[0.0 for i in range (10)]  for j in range(10)])
+    count_per_label = [0 for i in range(10)]
+
+
+    for features, labels in dataset:
+        features = features.to(device)
+        labels = labels.to(device)
+        outputs = model(features)
+
+        for i, label in enumerate(labels):
+            #print(labels)
+            outputs_sum_per_label[label] = outputs_sum_per_label[label] + outputs.detach().cpu().numpy()[i]
+            #print(outputs_sum_per_label[label])
+            count_per_label[label] += 1
+        ##########
+        #print(count_per_label)
+        #print(outputs_sum_per_label)
+        #batch_loss = self.criterion(outputs, labels)
+        #loss += batch_loss.item()
+
+        _, pred_labels = torch.max(outputs, 1)#每行的最大值
+        pred_labels = pred_labels.view(-1)#reshape成一行
+        correct += torch.sum(torch.eq(pred_labels, labels)).item()
+        total += len(labels)
+
+    accuracy = correct/total
+    output_avg_per_label = [outputs_sum_per_label[i]/max(1, sum(count_per_label)) for i in range(10)]
+    
+
+    return accuracy, loss, output_avg_per_label
+
+def get_all_index(lst=None, item=''):
+    return [index for (index,value) in enumerate(lst) if value == item]
 
 def FedProx_clustered_sampling(
     sampling: str,
@@ -301,7 +353,7 @@ def FedProx_clustered_sampling(
     returns :
         - `model`: the final global model
     """
-
+    begin_time = time()#
     from scipy.cluster.hierarchy import linkage
     from py_func.clustering import get_matrix_similarity_from_grads
 
@@ -336,7 +388,7 @@ def FedProx_clustered_sampling(
     if sampling == "clustered_1":
         from py_func.clustering import get_clusters_with_alg1
 
-        distri_clusters = get_clusters_with_alg1(n_sampled, weights)
+        #distri_clusters = get_clusters_with_alg1(n_sampled, weights)
 
     elif sampling == "clustered_2":
         from py_func.clustering import get_gradients
@@ -385,8 +437,53 @@ def FedProx_clustered_sampling(
                 sampled_clients_hist[i, k] = 1
 
         else:
-            if sampling == "clustered_2":
 
+##############################添加我的方法替换 c1############################
+##核心在于distri_clusters构造
+## n * m 矩阵， n:n_sample m: total clents
+## 0.8 0.0 0.1 0.1
+## 0.9 0.1 0.0 0 0
+##
+#先MD抽样 m*frac个
+#再使用 m*frac个作聚类
+            if sampling == "clustered_1":
+                frac = 10 #调整比例
+
+                np.random.seed(i)
+                sampled_clients_1 = np.random.choice(
+                    K, size=n_sampled * frac, replace=True, p=weights
+                )
+
+                all_output_avg_per_label = []
+
+                #测试集
+                for k in sampled_clients_1:
+                    #acc_hist[i + 1, k] = accuracy_dataset(model, dl)
+                    _, loss, output_avg_per_label = cal_per_avg_class_score(model, testing_sets[k])
+                    all_output_avg_per_label.append(output_avg_per_label)
+
+                all_output_avg_per_label = np.array(all_output_avg_per_label)
+                nusers, nx, ny = all_output_avg_per_label.shape
+                all_output_avg_per_label = all_output_avg_per_label.reshape((nusers, nx*ny))
+                num_clusters = n_sampled
+                kmeans = KMeans(n_clusters = num_clusters).fit(all_output_avg_per_label)
+                out_pred = kmeans.predict(all_output_avg_per_label)
+
+
+                #每个类别挑选一个
+                distri_clusters = np.zeros((n_sampled, len(training_sets))).astype(int)
+                for k in range(num_clusters):
+                    idx = get_all_index(list(out_pred), k)
+                    idx = [sampled_clients_1[idx1] for idx1 in idx]
+                    idx_weight = [weights[i] for i in idx]
+                    idx_weight = idx_weight / np.sum(idx_weight)
+
+                    sampled_idx = np.random.choice(idx, size=1, replace=True, p=idx_weight)
+
+                    distri_clusters[k][sampled_idx] = 1
+#################################################################################
+                # print(distri_clusters)
+            if sampling == "clustered_2":
                 # GET THE CLIENTS' SIMILARITY MATRIX
                 sim_matrix = get_matrix_similarity_from_grads(
                     gradients, distance_type=sim_type
@@ -424,12 +521,15 @@ def FedProx_clustered_sampling(
                 sampled_clients_for_grad.append(k)
                 sampled_clients_hist[i, k] = 1
 
+
         # CREATE THE NEW GLOBAL MODEL AND SAVE IT
         model = FedAvg_agregation_process(
             deepcopy(model), clients_params, weights=[1 / n_sampled] * n_sampled
         )
 
         # COMPUTE THE LOSS/ACCURACY OF THE DIFFERENT CLIENTS WITH THE NEW MODEL
+
+        #print("================ %d", i)
         if i % metric_period == 0:
 
             for k, dl in enumerate(training_sets):
@@ -446,7 +546,6 @@ def FedProx_clustered_sampling(
             print(
                 f"====> i: {i+1} Loss: {server_loss} Server Test Accuracy: {server_acc}"
             )
-
         # UPDATE THE HISTORY OF LATEST GRADIENT
         if sampling == "clustered_2":
             gradients_i = get_gradients(
@@ -467,7 +566,9 @@ def FedProx_clustered_sampling(
     torch.save(
         model.state_dict(), f"saved_exp_info/final_model/{file_name}.pth"
     )
-
+    end_time = time()#
+    run_time = end_time - begin_time#
+    print(f"run time: {run_time}")#
     return model, loss_hist, acc_hist
 
 
@@ -515,7 +616,7 @@ def FedProx_sampling_target(
     ]
     acc_hist = [[accuracy_dataset(model, dl) for dl in testing_sets]]
     server_hist = [
-        [tens_param.detach().numpy() for tens_param in list(model.parameters())]
+        [tens_param.detach().cpu().numpy() for tens_param in list(model.parameters())]
     ]
     models_hist = []
     sampled_clients_hist = []

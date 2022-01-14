@@ -67,31 +67,48 @@ def loss_acc_evo(
     except:
         pass
     if idx_row == 0:
-        axis[idx_row, 1].legend(kept, title=r"$\bf{Sampling}$")
+        axis[idx_row, 1].legend(["MD", "MD_CS", "WPCS"], title=r"$\bf{Sampling}$")
     if idx_row == 0:
         axis[idx_row, 1].set_title("Training Loss")
     if idx_row == n_rows - 1:
         axis[idx_row, 1].set_xlabel("# rounds", labelpad=0.0)
 
 
-def plot_fig_CIFAR10_alpha_effect_both(n_SGD: int, p: float, mu: float):
+def plot_fig_CIFAR10_alpha_effect_both(n_SGD: int, p: float, mu: float):#f4
 
-    kept = ["MD", "Alg. 1", "Alg. 2"]
-    plot_names = ["(a)", "(b)", "(c)", "(d)"]
+    kept = ["MD", "Alg. 2", "Alg. 1"]
+    plot_names = ["(a)", "(b)", "(c)"]
 
-    n_rows, n_cols = 4, 2
+    n_rows, n_cols = 3, 2
     dataset_base = "CIFAR10"
 
-    fig, axis = plt.subplots(n_rows, n_cols, figsize=(4.5, 8))
+    fig, axis = plt.subplots(n_rows, n_cols, figsize=(4.5, 6))
 
     # INFLUENCE OF THE NON-IID ASPECT
     sampling = "clustered_1"
     seed = 0
     decay = 1.0
 
+    # loss_acc_evo(
+    #     kept,
+    #     f"{dataset_base}_nbal_10.0",
+    #     sampling,
+    #     n_SGD,
+    #     seed,
+    #     0.1,
+    #     decay,
+    #     p,
+    #     mu,
+    #     n_rows,
+    #     n_cols,
+    #     axis,
+    #     0,
+    #     plot_names,
+    # )
+
     loss_acc_evo(
         kept,
-        f"{dataset_base}_nbal_10.0",
+        f"{dataset_base}_nbal_0.1",
         sampling,
         n_SGD,
         seed,
@@ -108,7 +125,7 @@ def plot_fig_CIFAR10_alpha_effect_both(n_SGD: int, p: float, mu: float):
 
     loss_acc_evo(
         kept,
-        f"{dataset_base}_nbal_0.1",
+        f"{dataset_base}_nbal_0.01",
         sampling,
         n_SGD,
         seed,
@@ -125,7 +142,7 @@ def plot_fig_CIFAR10_alpha_effect_both(n_SGD: int, p: float, mu: float):
 
     loss_acc_evo(
         kept,
-        f"{dataset_base}_nbal_0.01",
+        f"{dataset_base}_nbal_0.001",
         sampling,
         n_SGD,
         seed,
@@ -137,23 +154,6 @@ def plot_fig_CIFAR10_alpha_effect_both(n_SGD: int, p: float, mu: float):
         n_cols,
         axis,
         2,
-        plot_names,
-    )
-
-    loss_acc_evo(
-        kept,
-        f"{dataset_base}_nbal_0.001",
-        sampling,
-        n_SGD,
-        seed,
-        0.1,
-        decay,
-        p,
-        mu,
-        n_rows,
-        n_cols,
-        axis,
-        3,
         plot_names,
     )
 
@@ -222,8 +222,8 @@ def metric_evo(
     except:
         pass
     axis[idx_row, idx_col].set_title(plot_name)
-    if idx_row == 0 and idx_col == 0:
-        axis[idx_row, idx_col].legend(kept, title=r"$\bf{Sampling}$")
+    # if idx_row == 0 and idx_col == 1:
+        # #axis[idx_row, idx_col].legend(kept, title=r"$\bf{Sampling}$")
     if idx_row == n_rows - 1:
         axis[idx_row, idx_col].set_xlabel("# rounds")
     if idx_col == 0:
@@ -234,12 +234,13 @@ def plot_fig_CIFAR10_alpha_effect_one(
     metric: str, n_SGD: int, p: float, mu: float, smooth: bool
 ):
 
-    kept = ["MD", "Alg. 1", "Alg. 2"]
+    kept = ["MD", "Alg. 2", "Alg. 1"]
 
     n_rows, n_cols = 2, 2
     dataset_base = "CIFAR10"
 
     fig, axis = plt.subplots(n_rows, n_cols, figsize=(4.5, 3.7))
+    axis[0, 1].axis("off")
 
     # INFLUENCE OF THE NON-IID ASPECT
 
@@ -247,25 +248,25 @@ def plot_fig_CIFAR10_alpha_effect_one(
     seed = 0
     decay = 1.0
 
-    metric_evo(
-        metric,
-        kept,
-        f"{dataset_base}_nbal_10.0",
-        sampling,
-        n_SGD,
-        seed,
-        0.05,
-        decay,
-        p,
-        mu,
-        n_rows,
-        n_cols,
-        axis,
-        0,
-        0,
-        r"$\alpha=10$",
-        smooth,
-    )
+    # metric_evo(
+    #     metric,
+    #     kept,
+    #     f"{dataset_base}_nbal_10.0",
+    #     sampling,
+    #     n_SGD,
+    #     seed,
+    #     0.1,
+    #     decay,
+    #     p,
+    #     mu,
+    #     n_rows,
+    #     n_cols,
+    #     axis,
+    #     0,
+    #     0,
+    #     r"$\alpha=10$",
+    #     smooth,
+    # )
 
     metric_evo(
         metric,
@@ -282,7 +283,7 @@ def plot_fig_CIFAR10_alpha_effect_one(
         n_cols,
         axis,
         0,
-        1,
+        0,
         r"$\alpha=0.1$",
         smooth,
         1.75,
@@ -316,7 +317,7 @@ def plot_fig_CIFAR10_alpha_effect_one(
         sampling,
         n_SGD,
         seed,
-        0.1,
+        0.05,
         decay,
         p,
         mu,
@@ -331,4 +332,14 @@ def plot_fig_CIFAR10_alpha_effect_one(
     )
 
     plt.tight_layout(pad=0.0)
+
+    fig.legend(
+        #l_x,
+        #labels=kept,
+        labels=["MD", "MD_CS", "WPCS"],
+        title=r"$\bf{Sampling}$",
+        ncol=1,
+        bbox_to_anchor=(0.85, 0.9),
+    )
+
     plt.savefig(f"plots/plot_CIFAR_custom_lr.pdf")

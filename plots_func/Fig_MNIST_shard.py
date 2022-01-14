@@ -3,6 +3,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+plt.switch_backend('agg')
 import pickle as pkl
 
 
@@ -92,7 +93,8 @@ def plot_fig_alg2(
 
     print(legend)
 
-    kept = ["MD", "Target", "Alg. 1", "Alg. 2"]
+    #kept = ["MD", "Target", "Alg. 1", "Alg. 2"]
+    kept = ["MD", "Target", "Alg. 2", "Alg. 1"]
 
     idx_kept = [legend.index(title_simu) for title_simu in kept]
 
@@ -163,7 +165,8 @@ def plot_fig_alg2(
     plt.tight_layout(pad=0.0)
     fig.legend(
         l_x,
-        labels=kept,
+        #labels=kept,
+        labels=["MD", "Target", "MD_CS", "WPCS"],
         title=r"$\bf{Sampling}$",
         ncol=2,
         bbox_to_anchor=(1.0, 0.9),

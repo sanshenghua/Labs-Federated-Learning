@@ -6,9 +6,10 @@ import os
 
 """UPLOADING THE DATASETS"""
 import sys
+import torch
 
 print(
-    "dataset - sampling - sim_type - seed - n_SGD - lr - decay - p - force - mu"
+    "dataset - sampling - sim_type - seed - n_SGD - lr - decay - p - force - gpu - mu"
 )
 print(sys.argv[1:])
 
@@ -21,11 +22,15 @@ lr = float(sys.argv[6])
 decay = float(sys.argv[7])
 p = float(sys.argv[8])
 force = sys.argv[9] == "True"
+gpu_id = str(sys.argv[10])
 
 try:
-    mu = float(sys.argv[10])
+    mu = float(sys.argv[11])
 except:
     mu = 0.0
+
+#指定gpu id
+#torch.cuda.set_device(gpu_id) 
 
 
 """GET THE HYPERPARAMETERS"""
@@ -65,6 +70,8 @@ from py_func.create_model import load_model
 model_0 = load_model(dataset, seed)
 print(model_0)
 
+
+os.environ["CUDA_VISIBLE_DEVICES"] = gpu_id
 
 """FEDAVG with random sampling"""
 if sampling == "random" and (

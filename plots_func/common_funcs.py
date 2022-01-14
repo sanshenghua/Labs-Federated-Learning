@@ -50,6 +50,9 @@ def get_acc_loss(
 
         try:
             hist = get_one_acc_loss(sampling, sampling_type)
+            print(name)
+            print(len(hist[0]))
+            print(hist[1][-1])
 
             hists.append(hist)
             legend.append(name)

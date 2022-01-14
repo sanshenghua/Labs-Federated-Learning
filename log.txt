@@ -1,0 +1,154 @@
+
+
+
+
+python FL.py CIFAR10_nbal_10.0 clustered_1 any 0 100 0.1 1.0 0.1 False 0 
+
+====> i: 986 Loss: 0.42600210346953615 Server Test Accuracy: 68.05154639175258
+====> i: 991 Loss: 0.43050834917818603 Server Test Accuracy: 68.11340206185567
+====> i: 996 Loss: 0.4273015580648921 Server Test Accuracy: 68.01030927835052
+run time: 7488.019785404205
+
+
+python FL.py CIFAR10_nbal_10.0 clustered_2 cosine 0 100 0.1 1.0 0.1 True 0 
+====> i: 971 Loss: 0.34748035647819947 Server Test Accuracy: 69.55670103092784
+====> i: 976 Loss: 0.34028723871277783 Server Test Accuracy: 69.24742268041237
+====> i: 981 Loss: 0.33632034828367924 Server Test Accuracy: 68.84536082474227
+====> i: 986 Loss: 0.3341689145134896 Server Test Accuracy: 69.41237113402062
+====> i: 991 Loss: 0.3381672639975843 Server Test Accuracy: 69.31958762886597
+====> i: 996 Loss: 0.3366772520019837 Server Test Accuracy: 68.95876288659794
+run time: 9210.827329397202
+
+
+python FL.py MNIST_shard clustered_1 any 0 50 0.01 1.0 0.1 True 0 
+====> i: 591 Loss: 0.5055608765780926 Server Test Accuracy: 87.25
+====> i: 593 Loss: 0.504940437823534 Server Test Accuracy: 87.325
+====> i: 595 Loss: 0.505003892481327 Server Test Accuracy: 87.20000000000002
+====> i: 597 Loss: 0.5026165686547757 Server Test Accuracy: 87.38749999999999
+====> i: 599 Loss: 0.5026174233853817 Server Test Accuracy: 87.33749999999999
+run time: 4549.03053689003
+
+python FL.py MNIST_shard clustered_2 cosine 0 50 0.01 1.0 0.1 True 0 
+====> i: 591 Loss: 0.5082805533707141 Server Test Accuracy: 87.0125
+====> i: 593 Loss: 0.5041401772201062 Server Test Accuracy: 87.2625
+====> i: 595 Loss: 0.5042360411584378 Server Test Accuracy: 87.16250000000002
+====> i: 597 Loss: 0.5036526322364808 Server Test Accuracy: 87.36250000000001
+====> i: 599 Loss: 0.5029260928928853 Server Test Accuracy: 87.225
+run time: 4456.3243227005005
+
+
+python FL.py CIFAR10_nbal_0.001 clustered_2 cosine 0 10 0.1 1.0 0.1 False 1 
+====> i: 1951 Loss: 1.1063091738015105 Server Test Accuracy: 56.927835051546396
+====> i: 1961 Loss: 0.9643076071419668 Server Test Accuracy: 61.628865979381445
+====> i: 1971 Loss: 1.07413742095232 Server Test Accuracy: 58.36082474226804
+====> i: 1981 Loss: 1.004443656753019 Server Test Accuracy: 60.628865979381445
+====> i: 1991 Loss: 1.0774345954976128 Server Test Accuracy: 57.50515463917526
+run time: 7240.978095531464
+
+python FL.py CIFAR10_nbal_0.001 clustered_2 cosine 0 100 0.05 1.0 0.2 False 0
+====> i: 981 Loss: 1.573171041245313 Server Test Accuracy: 41.50515463917526
+====> i: 986 Loss: 1.2912303967266967 Server Test Accuracy: 51.711340206185575
+====> i: 991 Loss: 1.358247712100904 Server Test Accuracy: 49.23711340206186
+====> i: 996 Loss: 1.2762033699714033 Server Test Accuracy: 51.49484536082474
+run time: 14905.797087669373
+
+
+# python FL.py CIFAR10_nbal_0.001 random any 0 100 0.05 1.0 0.1 True 1 
+# python FL.py CIFAR10_nbal_0.001 clustered_1 any 0 100 0.05 1.0 0.1 True 1 
+# python FL.py CIFAR10_nbal_0.001 clustered_2 cosine 0 100 0.05 1.0 0.1 True 1 
+# python FL.py CIFAR10_nbal_0.01 random any 0 100 0.05 1.0 0.1 False 1 
+# python FL.py CIFAR10_nbal_0.01 clustered_1 any 0 100 0.05 1.0 0.1 False 1 
+# python FL.py CIFAR10_nbal_0.01 clustered_2 cosine 0 100 0.05 1.0 0.1 False 1 
+# python FL.py CIFAR10_nbal_0.1 random any 0 100 0.05 1.0 0.1 False 1 
+# python FL.py CIFAR10_nbal_0.1 clustered_1 any 0 100 0.05 1.0 0.1 False 1 
+# python FL.py CIFAR10_nbal_0.1 clustered_2 cosine 0 100 0.05 1.0 0.1 False 1 
+# python FL.py CIFAR10_nbal_10.0 random any 0 100 0.1 1.0 0.1 False 1 
+# python FL.py CIFAR10_nbal_10.0 clustered_1 any 0 100 0.1 1.0 0.1 False 1 
+# python FL.py CIFAR10_nbal_10.0 clustered_2 cosine 0 100 0.1 1.0 0.1 False 1 
+
+python FL.py CIFAR10_nbal_0.1 random any 0 500 0.05 1.0 0.1 False 1 
+python FL.py CIFAR10_nbal_0.1 clustered_1 any 0 500 0.05 1.0 0.1 False 1 
+python FL.py CIFAR10_nbal_0.1 clustered_2 cosine 0 500 0.05 1.0 0.1 False 1 
+python FL.py CIFAR10_nbal_0.1 random any 0 10 0.1 1.0 0.1 False 1 
+python FL.py CIFAR10_nbal_0.1 clustered_1 any 0 10 0.1 1.0 0.1 False 1 
+python FL.py CIFAR10_nbal_0.1 clustered_2 cosine 0 10 0.1 1.0 0.1 False 1 
+# python FL.py CIFAR10_nbal_0.1 random any 0 100 0.05 1.0 0.05 False 1 
+# python FL.py CIFAR10_nbal_0.1 random any 0 100 0.05 1.0 0.2 False 1 
+# python FL.py CIFAR10_nbal_0.1 clustered_1 any 0 100 0.05 1.0 0.05 False 1 
+# python FL.py CIFAR10_nbal_0.1 clustered_1 any 0 100 0.05 1.0 0.2 False 1 
+# python FL.py CIFAR10_nbal_0.1 clustered_2 cosine 0 100 0.05 1.0 0.05 False 1  6104.619728803635
+# python FL.py CIFAR10_nbal_0.1 clustered_2 cosine 0 100 0.05 1.0 0.2 False 1  14279.527418136597
+
+
+
+====================
+k =1
+====> i: 976 Loss: 1.710147140044527 Server Test Accuracy: 39.93814432989691
+====> i: 981 Loss: 1.5497641989865254 Server Test Accuracy: 44.08247422680412
+====> i: 986 Loss: 1.7002819185097193 Server Test Accuracy: 42.22680412371135
+====> i: 991 Loss: 1.4235480232337088 Server Test Accuracy: 46.06185567010309
+====> i: 996 Loss: 1.5445816257565288 Server Test Accuracy: 44.206185567010316
+
+k =2
+====> i: 941 Loss: 1.3583466494820784 Server Test Accuracy: 48.628865979381445
+====> i: 946 Loss: 1.3874119655373172 Server Test Accuracy: 48.63917525773195
+====> i: 951 Loss: 1.2630543256543347 Server Test Accuracy: 53.123711340206185
+====> i: 956 Loss: 1.5365852856758941 Server Test Accuracy: 43.50515463917525
+====> i: 961 Loss: 1.4687454455292106 Server Test Accuracy: 46.938144329896915
+====> i: 966 Loss: 1.3432441731089166 Server Test Accuracy: 49.64948453608248
+====> i: 971 Loss: 1.4708689762144975 Server Test Accuracy: 45.54639175257733
+====> i: 976 Loss: 1.3174469443940622 Server Test Accuracy: 50.72164948453609
+====> i: 981 Loss: 1.5012218430484694 Server Test Accuracy: 44.360824742268036
+====> i: 986 Loss: 1.538012064640055 Server Test Accuracy: 44.95876288659794
+====> i: 991 Loss: 1.3498628062685738 Server Test Accuracy: 50.381443298969074
+====> i: 996 Loss: 1.3782333434857044 Server Test Accuracy: 49.216494845360835
+run time: 17780.8752923
+
+
+
+k=4 dev0
+====> i: 926 Loss: 1.2949602006636944 Server Test Accuracy: 51.24742268041238
+====> i: 931 Loss: 1.315646916627884 Server Test Accuracy: 51.670103092783506
+====> i: 936 Loss: 1.3032329177733548 Server Test Accuracy: 50.96907216494845
+====> i: 941 Loss: 1.4666291675309546 Server Test Accuracy: 47.16494845360825
+====> i: 946 Loss: 1.3957260740786486 Server Test Accuracy: 49.0
+====> i: 951 Loss: 1.3129442989826206 Server Test Accuracy: 51.360824742268036
+====> i: 956 Loss: 1.2778788775512853 Server Test Accuracy: 52.37113402061855
+====> i: 961 Loss: 1.4162108040347543 Server Test Accuracy: 47.690721649484544
+====> i: 966 Loss: 1.3131001421471231 Server Test Accuracy: 51.35051546391753
+====> i: 971 Loss: 1.2809306032264356 Server Test Accuracy: 52.30927835051546
+====> i: 976 Loss: 1.260076999787203 Server Test Accuracy: 52.77319587628865
+====> i: 981 Loss: 1.2959473216656558 Server Test Accuracy: 51.49484536082475
+====> i: 986 Loss: 1.338611186288067 Server Test Accuracy: 50.19587628865978
+====> i: 991 Loss: 1.2965642025175783 Server Test Accuracy: 51.639175257731964
+====> i: 996 Loss: 1.2637934085020084 Server Test Accuracy: 52.96907216494846
+run time: 32979.0869038105
+
+
+k=6 dev1
+====> i: 936 Loss: 1.2955815738009422 Server Test Accuracy: 52.02061855670103
+====> i: 941 Loss: 1.2785673230579218 Server Test Accuracy: 52.12371134020619
+====> i: 946 Loss: 1.4031114273464556 Server Test Accuracy: 49.27835051546391
+====> i: 951 Loss: 1.2977793939949311 Server Test Accuracy: 52.21649484536083
+====> i: 956 Loss: 1.3236767202922977 Server Test Accuracy: 50.340206185567006
+====> i: 961 Loss: 1.3181402937038655 Server Test Accuracy: 51.09278350515464
+====> i: 966 Loss: 1.3229521630351075 Server Test Accuracy: 51.1958762886598
+====> i: 971 Loss: 1.3663596695231406 Server Test Accuracy: 48.83505154639176
+====> i: 976 Loss: 1.2939882575236645 Server Test Accuracy: 52.16494845360825
+====> i: 981 Loss: 1.2802408917663024 Server Test Accuracy: 52.49484536082474
+====> i: 986 Loss: 1.4419468724850526 Server Test Accuracy: 46.03092783505156
+====> i: 991 Loss: 1.2926476151058355 Server Test Accuracy: 51.65979381443299
+====> i: 996 Loss: 1.272072006009289 Server Test Accuracy: 51.63917525773196
+run time: 33371.651410102844
+
+k=8 dev0
+k=10 dev1
+
+
+k=10
+====> i: 976 Loss: 1.2835569139608403 Server Test Accuracy: 52.432989690721655
+====> i: 981 Loss: 1.2664562069263656 Server Test Accuracy: 53.24742268041238
+====> i: 986 Loss: 1.3018676899143105 Server Test Accuracy: 51.1958762886598
+====> i: 991 Loss: 1.2689087696911137 Server Test Accuracy: 52.659793814432994
+====> i: 996 Loss: 1.2901849250203559 Server Test Accuracy: 52.18556701030928
+run time: 7447.019828081131

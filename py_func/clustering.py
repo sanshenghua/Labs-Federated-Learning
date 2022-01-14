@@ -79,11 +79,11 @@ def get_gradients(sampling, global_m, local_models):
     local_model_params = []
     for model in local_models:
         local_model_params += [
-            [tens.detach().numpy() for tens in list(model.parameters())]
+            [tens.detach().cpu().numpy() for tens in list(model.parameters())]
         ]
 
     global_model_params = [
-        tens.detach().numpy() for tens in list(global_m.parameters())
+        tens.detach().cpu().numpy() for tens in list(global_m.parameters())
     ]
 
     local_model_grads = []

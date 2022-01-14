@@ -1,0 +1,9 @@
+dataset - sampling - sim_type - seed - n_SGD - lr - decay - p - force - gpu - mu
+['CIFAR10_nbal_0', 'clustered_2', 'cosine', '0', '100', '0.05', '1.0', '0.1', 'True', '0']
+number of iterations 1000
+batch size 50
+percentage of sampled clients 0.1
+metric_period 5
+regularization term 0.0
+CIFAR10_nbal_0_clustered_2_cosine_i1000_N100_lr0.05_B50_d1.0_p0.1_m5_0
+creating dataset alpha: 0.0

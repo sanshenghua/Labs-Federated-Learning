@@ -51,7 +51,7 @@ def loss_acc_evo(
     if idx_row == n_rows - 1:
         axis[idx_row, 0].set_xlabel("# rounds", labelpad=0.0)
     if idx_row == 0:
-        axis[idx_row, 0].legend(kept, title=r"$\bf{Sampling}$")
+        axis[idx_row, 0].legend(["MD", "MD_CS", "WPCS"], title=r"$\bf{Sampling}$")
     axis[idx_row, 0].set_ylabel(plot_names[idx_row], rotation=0, labelpad=6.0)
 
     try:
@@ -72,9 +72,9 @@ def loss_acc_evo(
         axis[idx_row, 1].set_xlabel("# rounds", labelpad=0.0)
 
 
-def plot_fig_CIFAR10_N_and_m_both(alpha: float, l_lr: float, l_p: float):
+def plot_fig_CIFAR10_N_and_m_both(alpha: float, l_lr: float, l_p: float):#f5
 
-    kept = ["MD", "Alg. 1", "Alg. 2"]
+    kept = ["MD", "Alg. 2", "Alg. 1"]
     plot_names = ["(a)", "(b)", "(c)", "(d)"]
 
     n_rows, n_cols = 4, 2

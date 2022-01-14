@@ -13,7 +13,8 @@ plot_fig_CIFAR10_alpha_effect_both(n_SGD, p, mu)
 from plots_func.Fig_CIFAR10_N_and_m import plot_fig_CIFAR10_N_and_m_both
 from plots_func.Fig_CIFAR10_N_and_m import plot_fig_CIFAR10_N_and_m_one
 
-alpha = 0.01
+#alpha = 0.01
+alpha = 0.001
 
 l_lr = [0.1, 0.05, 0.05, 0.05]
 l_p = [0.1, 0.1, 0.05, 0.2]
